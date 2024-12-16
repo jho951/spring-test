@@ -1,6 +1,8 @@
-package com.mysite.sbb;
+package com.mysite.sbb.answer;
 
 import java.time.LocalDateTime;
+
+import com.mysite.sbb.question.Question;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.*;
 import lombok.Getter;

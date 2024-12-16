@@ -1,10 +1,11 @@
 
-package com.mysite.sbb;
+package com.mysite.sbb.question;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 // 상위가 지워지면 다 지워짐
+import com.mysite.sbb.answer.Answer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
