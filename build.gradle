@@ -39,6 +39,9 @@ dependencies {
 	testImplementation 'org.junit.jupiter:junit-jupiter'
 	// 해당 라이브러리가 테스트 실행 시에만 사용
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	// 타임리프 사용 시
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 }
 
 tasks.named('test') {
