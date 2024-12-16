@@ -13,4 +13,8 @@ public class MainController {
     public String hello() {
         return "Hello world!";
     }
+    @GetMapping("/")
+    public String root() {
+        return "redirect:/question/list";
+    }
 }
