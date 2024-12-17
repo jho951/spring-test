@@ -6,12 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 // @RequiredArgsConstructor 애너테이션의 생성자 방식으로 questionRepository 객체를 주입
 import lombok.RequiredArgsConstructor;
 
-
+@RequestMapping("/question")
 
 // 롬복(Lombok)이 제공하는 애너테이션으로, final이 붙은 속성을 포함하는 생성자를 자동으로 만들어 주는 역할
 // 스프링 부트(Spring Boot)가 내부적으로 QuestionController를 생성할 때
@@ -24,7 +26,8 @@ public class QuestionController {
     private final QuestionRepository questionRepository;
     // 템플릿을 사용하면 필요가 없습니다.
     // @ResponseBody
-    @GetMapping("/question/list")
+    // @GetMapping("/question/list")
+    @GetMapping("/list")
    //그리고 QuestionRepository의 findAll 메서드를 사용하여 질문 목록 데이터인 questionList를 생성하고
     // Model 객체에 ‘questionList’라는 이름으로 저장했다.
     // 여기서 Model 객체는 자바 클래스(Java class)와 템플릿(template) 간의 연결 고리 역할을 한다.
@@ -42,10 +45,16 @@ public class QuestionController {
 //        return "question_detail";
 //    }
 
-    @GetMapping(value = "/question/detail/{id}")
+//    @GetMapping(value = "/question/detail/{id}")
+
+
+
+
+    @GetMapping(value = "/detail/{id}")
     public String detail(Model model, @PathVariable("id") Integer id) {
         Question question = this.questionService.getQuestion(id);
         model.addAttribute("question", question);
         return "question_detail";
     }
+
 }
