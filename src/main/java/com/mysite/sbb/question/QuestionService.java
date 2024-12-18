@@ -3,6 +3,7 @@ package com.mysite.sbb.question;
 import java.util.List;
 import java.util.Optional;
 import com.mysite.sbb.DataNotFoundException;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
@@ -27,5 +28,13 @@ public class QuestionService {
         } else {
             throw new DataNotFoundException("question not found");
         }
+    }
+    // 제목(subject)과 내용(content)을 입력받아 이를 질문으로 저장
+    public void create(String subject, String content) {
+        Question q = new Question();
+        q.setSubject(subject);
+        q.setContent(content);
+        q.setCreateDate(LocalDateTime.now());
+        this.questionRepository.save(q);
     }
 }

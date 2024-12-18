@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 // @RequiredArgsConstructor 애너테이션의 생성자 방식으로 questionRepository 객체를 주입
 import lombok.RequiredArgsConstructor;
 
@@ -62,5 +65,13 @@ public class QuestionController {
     public String questionCreate() {
         return "question_form";
     }
-
+// POST 방식으로 요청한 /question/create URL을 처리하도록 @PostMapping 애너테이션을 지정한 questionCreate 메서드를 추가
+// @GetMapping에서 사용한 questionCreate 메서드명과 동일하게 사용할 수 있다(단, 매개변수의 형태가 다른 경우에 가능하다.).
+// questionCreate 메서드는 화면에서 입력한 제목(subject)과 내용(content)을 매개변수로 받는다.
+    @PostMapping("/create")
+    public String questionCreate(@RequestParam(value="subject") String subject, @RequestParam(value="content") String content) {
+       // 질문 저장
+        this.questionService.create(subject, content);
+        return "redirect:/question/list"; // 질문 저장후 질문목록으로 이동
+    }
 }
