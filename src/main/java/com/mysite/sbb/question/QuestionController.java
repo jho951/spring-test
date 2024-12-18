@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import jakarta.validation.Valid;
+import org.springframework.validation.BindingResult;
+import com.mysite.sbb.answer.AnswerForm;
 // @RequiredArgsConstructor 애너테이션의 생성자 방식으로 questionRepository 객체를 주입
 import lombok.RequiredArgsConstructor;
 
@@ -50,28 +52,33 @@ public class QuestionController {
 
 //    @GetMapping(value = "/question/detail/{id}")
 
-
-
-
     @GetMapping(value = "/detail/{id}")
-    public String detail(Model model, @PathVariable("id") Integer id) {
+    public String detail(Model model, @PathVariable("id") Integer id, AnswerForm answerForm) {
         Question question = this.questionService.getQuestion(id);
         model.addAttribute("question", question);
         return "question_detail";
     }
 
 // GET 요청에 해당하므로 @GetMapping 애너테이션을 사용했다. questionCreate 메서드는 question_form 템플릿을 출력한다.
+    // questionCreate 메서드에 매개변수로 QuestionForm 객체를 추가했다. 이렇게 하면 이제 GET 방식에서도 question_form 템플릿에 QuestionForm 객체가 전달된다.
     @GetMapping("/create")
-    public String questionCreate() {
+    public String questionCreate(QuestionForm questionForm) {
         return "question_form";
     }
 // POST 방식으로 요청한 /question/create URL을 처리하도록 @PostMapping 애너테이션을 지정한 questionCreate 메서드를 추가
 // @GetMapping에서 사용한 questionCreate 메서드명과 동일하게 사용할 수 있다(단, 매개변수의 형태가 다른 경우에 가능하다.).
 // questionCreate 메서드는 화면에서 입력한 제목(subject)과 내용(content)을 매개변수로 받는다.
     @PostMapping("/create")
-    public String questionCreate(@RequestParam(value="subject") String subject, @RequestParam(value="content") String content) {
-       // 질문 저장
-        this.questionService.create(subject, content);
-        return "redirect:/question/list"; // 질문 저장후 질문목록으로 이동
+    // @Valid 애너테이션을 적용하면 QuestionForm의 @NotEmpty, @Size 등으로 설정한 검증 기능이 동작
+    public String questionCreate(@Valid QuestionForm questionForm, BindingResult bindingResult) {
+        // BindingResult 매개변수는 @Valid 애너테이션으로 검증이 수행된 결과를 의미하는 객체
+        // 항상 @Valid 매개변수 바로 뒤에 위치해야 한다.
+        if (bindingResult.hasErrors()) {
+            return "question_form";
+        }
+        this.questionService.create(questionForm.getSubject(), questionForm.getContent());
+        return "redirect:/question/list";
     }
+
+
 }
