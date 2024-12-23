@@ -2,10 +2,14 @@ package com.mysite.sbb.question;
 
 import java.util.List;
 
-import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.data.domain.Page;
 
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,17 +36,24 @@ public class QuestionController {
     // 템플릿을 사용하면 필요가 없습니다.
     // @ResponseBody
     // @GetMapping("/question/list")
-    @GetMapping("/list")
+//    @GetMapping("/list")
    //그리고 QuestionRepository의 findAll 메서드를 사용하여 질문 목록 데이터인 questionList를 생성하고
     // Model 객체에 ‘questionList’라는 이름으로 저장했다.
     // 여기서 Model 객체는 자바 클래스(Java class)와 템플릿(template) 간의 연결 고리 역할을 한다.
     // Model 객체에 값을 담아 두면 템플릿에서 그 값을 사용할 수 있다. Model 객체는 따로 생성할 필요 없이
     // 컨트롤러의 메서드에 매개변수로 지정하기만 하면 스프링 부트가 자동으로 Model 객체를 생성
-    public String list(Model model) {
-        List<Question> questionList = this.questionService.getList();
-        // findAll 메서드를 사용하여 질문 목록 데이터인 questionList를 생성하고 Model 객체에 ‘questionList’라는 이름으로 저장
-//        List<Question> questionList = this.questionRepository.findAll();
-        model.addAttribute("questionList", questionList);
+//    public String list(Model model) {
+//        List<Question> questionList = this.questionService.getList();
+//        // findAll 메서드를 사용하여 질문 목록 데이터인 questionList를 생성하고 Model 객체에 ‘questionList’라는 이름으로 저장
+////        List<Question> questionList = this.questionRepository.findAll();
+//        model.addAttribute("questionList", questionList);
+//        return "question_list";
+//    }
+
+    @GetMapping("/list")
+    public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
+        Page<Question> paging = this.questionService.getList(page);
+        model.addAttribute("paging", paging);
         return "question_list";
     }
 //    @GetMapping(value = "/question/detail/{id}")
@@ -79,6 +90,4 @@ public class QuestionController {
         this.questionService.create(questionForm.getSubject(), questionForm.getContent());
         return "redirect:/question/list";
     }
-
-
 }

@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import com.mysite.sbb.question.QuestionService;
 
 
 // SbbApplicationTests 클래스가 스프링 부트의 테스트 클래스임을 의미
@@ -22,14 +23,14 @@ import org.springframework.transaction.annotation.Transactional;
 class SbbApplicationTests {
 	//  테스트 코드 작성 시에만 권장
 	//  스프링의 ‘의존성 주입(DI)’이라는 기능을 사용해 스프링 부트가 questionRepository 객체를 자동으로 만들어 주입
-	@Autowired
-	private QuestionRepository questionRepository;
-
-	@Autowired
-	private AnswerRepository answerRepository;
+//	@Autowired
+//	private QuestionRepository questionRepository;
+//
+//	@Autowired
+//	private AnswerRepository answerRepository;
 
 	// testJpa 메서드가 테스트 메서드임을 나타낸다
-	@Test
+//	@Test
 
 
 //	void testJpa() {
@@ -121,15 +122,26 @@ class SbbApplicationTests {
 	// 데이터를 필요한 시점에 가져오는 방식을 지연(Lazy) 방식
 	//. @OneToMany, @ManyToOne 애너테이션의 옵션으로 fetch=FetchType.LAZY 또는 fetch=FetchType.EAGER처럼 가져오는 방식을 설정할 수 있는데
 	// @Transactional 애너테이션을 사용하면 메서드가 종료될 때까지 DB 세션이 유지된다.
-	@Transactional
+//	@Transactional
+//	void testJpa() {
+//		Optional<Question> oq = this.questionRepository.findById(2);
+//		assertTrue(oq.isPresent());
+//		Question q = oq.get();
+//
+//		List<Answer> answerList = q.getAnswerList();
+//
+//		assertEquals(1, answerList.size());
+//		assertEquals("네 자동으로 생성됩니다.", answerList.get(0).getContent());
+//	}
+	@Autowired
+	private QuestionService questionService;
+
+	@Test
 	void testJpa() {
-		Optional<Question> oq = this.questionRepository.findById(2);
-		assertTrue(oq.isPresent());
-		Question q = oq.get();
-
-		List<Answer> answerList = q.getAnswerList();
-
-		assertEquals(1, answerList.size());
-		assertEquals("네 자동으로 생성됩니다.", answerList.get(0).getContent());
+		for (int i = 1; i <= 300; i++) {
+			String subject = String.format("테스트 데이터입니다:[%03d]", i);
+			String content = "내용무";
+			this.questionService.create(subject, content);
+		}
 	}
 }
