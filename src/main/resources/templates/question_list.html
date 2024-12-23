@@ -12,6 +12,7 @@
         <!--    th:는 타임리프에서 사용하는 속성임을 나타내는데, 바로 이 부분이 자바 코드와 연결된다.-->
         <!--questionList의 개수만큼 반복해 출력-->
         <tr th:each="question : ${questionList}">
+            <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
             <td>
                 <a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"></a>
             </td>
